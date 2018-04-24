@@ -37,9 +37,34 @@ View(proportionByDistrict)
 #5.
 #Visualized changes of all types of crime over time using ggplot2
 #Wrote appropriate labels and titles
-
+March2018%>% 
+  mutate(
+    year = as.numeric(substr(DateOccur,7,10)),
+    month = as.numeric(substr(DateOccur,1,2)),
+    day = as.numeric(substr(DateOccur,4,5)),
+    hour = as.numeric(substr(DateOccur,12,13)),
+    minute = as.numeric(substr(DateOccur,15,16)),
+    time = year + month / 12 + day / 365 + hour / 8760 + minute / 525600
+  )%>% 
+  ggplot(mapping = aes(time)) + 
+  geom_freqpoly(mapping = aes(colour = Description), binwidth = 4)
 
 #6.
 #Visualized changes of all types of crime over time by district using ggplot2
 #Chose different color to indicate each district
 #Wrote appropriate legend, labels and titles
+numberByDistrict<-March2018%>%
+  group_by(District,robbery,DateOccur)%>% 
+  summarise(count=n()
+  )
+numberByDistrict%>% 
+  mutate(
+    year = as.numeric(substr(DateOccur,7,10)),
+    month = as.numeric(substr(DateOccur,1,2)),
+    day = as.numeric(substr(DateOccur,4,5)),
+    hour = as.numeric(substr(DateOccur,12,13)),
+    minute = as.numeric(substr(DateOccur,15,16)),
+    time = year + month / 12 + day / 365 + hour / 8760 + minute / 525600
+  )%>% 
+  ggplot(mapping = aes(time)) + 
+  geom_freqpoly(mapping = aes(colour = robbery), binwidth = 4)
